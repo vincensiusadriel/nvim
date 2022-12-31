@@ -1,5 +1,3 @@
--- Install packer
-local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 local is_bootstrap = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
     is_bootstrap = true
@@ -99,5 +97,12 @@ return require('packer').startup(function(use)
         'lewis6991/gitsigns.nvim',
         -- tag = 'release' -- To use the latest release (do not use this if you run Neovim nightly or dev builds!)
     }
+
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    }
+
+    use {'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons'}
 
 end)
