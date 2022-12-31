@@ -19,6 +19,7 @@ lsp.configure('sumneko_lua', {
 
 
 local cmp = require('cmp')
+local luasnip = require('luasnip')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
 -- ultisnip
@@ -30,13 +31,30 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<Tab>"] = cmp.mapping(
         function(fallback)
-            cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+            if cmp.visible() then
+                cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+            else
+                if luasnip.expand_or_locally_jumpable() then
+                    luasnip.jump(1)
+                else
+                    cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+                end
+            end
+
         end,
         { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
     ),
     ["<S-Tab>"] = cmp.mapping(
         function(fallback)
-            cmp_ultisnips_mappings.jump_backwards(fallback)
+            if cmp.visible() then
+                cmp_ultisnips_mappings.jump_backwards(fallback)
+            else
+                if luasnip.jumpable(-1) then
+                    luasnip.jump(-1)
+                else
+                    cmp_ultisnips_mappings.jump_backwards(fallback)
+                end
+            end
         end,
         { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
     ),
