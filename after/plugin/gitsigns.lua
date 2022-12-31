@@ -40,3 +40,8 @@ require('gitsigns').setup {
     enable = false
   },
 }
+
+vim.keymap.set("n", "<leader>gd", "<cmd>Gitsigns diffthis HEAD<cr>")
+vim.keymap.set("n", "<leader>go", "<cmd>Telescope git_status<cr>")
+vim.keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>")
+vim.keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>")
