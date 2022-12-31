@@ -104,3 +104,13 @@ vim.diagnostic.config({
     virtual_text = true,
     update_in_insert = true,
 })
+
+-- add format on save
+vim.api.nvim_create_augroup("lsp_format_on_save", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group = "lsp_format_on_save",
+    pattern = "*",
+    callback = function()
+        vim.lsp.buf.format()
+    end,
+})
