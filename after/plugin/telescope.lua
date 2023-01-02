@@ -10,11 +10,11 @@ vim.keymap.set('n', '<C-p>', function()
     end
 end, {})
 
-vim.keymap.set('n', '<C-f>', function()
-    builtin.grep_string({ search = vim.fn.input("Grep > ") })
-end)
 
 require("telescope").load_extension("lazygit")
 
 vim.keymap.set('n', '<leader>gg', ":LazyGit<cr>", {})
--- vim.keymap.set('n', '<leader>st', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>st', builtin.live_grep, {})
+vim.keymap.set('n', '<C-g>', function()
+    builtin.grep_string({ search = vim.fn.input("Grep > ") })
+end)
