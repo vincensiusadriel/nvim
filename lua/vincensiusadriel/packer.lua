@@ -4,7 +4,6 @@ local is_bootstrap = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
     is_bootstrap = true
     vim.fn.system { 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path }
-    vim.cmd [[packadd packer.nvim]]
 end
 
 vim.cmd [[packadd packer.nvim]]
@@ -14,7 +13,7 @@ return require('packer').startup(function(use)
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.0',
         -- or                            , branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' } }
+        requires = { { 'nvim-lua/plenary.nvim' }, { "kdheepak/lazygit.nvim" } }
     }
 
     use { 'nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' } }
@@ -105,6 +104,6 @@ return require('packer').startup(function(use)
         requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
 
-    use {'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons'}
+    use { 'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons' }
 
 end)
