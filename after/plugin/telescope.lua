@@ -17,4 +17,4 @@ end)
 require("telescope").load_extension("lazygit")
 
 vim.keymap.set('n', '<leader>gg', ":LazyGit<cr>", {})
--- vim.keymap.set('n', '<leader>st', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>st', builtin.live_grep, {})
