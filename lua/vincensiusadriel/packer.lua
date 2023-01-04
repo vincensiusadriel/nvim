@@ -107,4 +107,6 @@ return require('packer').startup(function(use)
     use { 'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons' }
 
     use 'nvim-treesitter/nvim-treesitter-context'
+
+    use 'simrat39/symbols-outline.nvim'
 end)
