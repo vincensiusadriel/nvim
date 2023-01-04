@@ -76,7 +76,7 @@ require("nvim-tree").setup({
         symlink_destination = true,
     },
     filters = {
-        dotfiles = true,
+        dotfiles = false,
     },
     diagnostics = {
         enable = true,
