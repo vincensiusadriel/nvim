@@ -30,7 +30,7 @@ vim.keymap.set("n", "<C-j>", "<C-w>j")
 vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-k>", "<C-w>k")
 vim.keymap.set("n", "<C-l>", "<C-w>l")
-vim.keymap.set({"n", "v"}, "<leader><Esc>", "<cmd>bdelete<cr>")
+vim.keymap.set({ "n", "v" }, "<leader><Esc>", "<cmd>bdelete<cr>")
 vim.keymap.set("t", "<leader><Esc>", "<C-\\><C-N>")
 
 vim.keymap.set("n", "<C-Up>", ":resize +2<CR>")
@@ -39,10 +39,11 @@ vim.keymap.set("n", "<C-Left>", ":vertical resize +2<CR>")
 vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>")
 
 vim.keymap.set("n", "<leader>/", "<Plug>(comment_toggle_linewise_current)")
-vim.keymap.set( "v", "<leader>/", "<Plug>(comment_toggle_linewise_visual)")
+vim.keymap.set("v", "<leader>/", "<Plug>(comment_toggle_linewise_visual)")
 
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set("v", "<leader>k", ":s/\\(.*\\)/\\1")
+-- replace mapping
+vim.keymap.set("n", "<leader>rs", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set({ "n", "v" }, "<leader>rk", ":s/\\(.*\\)/\\1")
 
 
 vim.keymap.set("t", "<C-j>", "<C-\\><C-N><C-w>h")
