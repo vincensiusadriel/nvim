@@ -50,3 +50,5 @@ vim.keymap.set("t", "<C-j>", "<C-\\><C-N><C-w>h")
 vim.keymap.set("t", "<C-h>", "<C-\\><C-N><C-w>j")
 vim.keymap.set("t", "<C-k>", "<C-\\><C-N><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-N><C-w>l")
+
+vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
