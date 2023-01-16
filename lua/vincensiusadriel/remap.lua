@@ -53,3 +53,6 @@ vim.keymap.set("t", "<C-l>", "<C-\\><C-N><C-w>l")
 
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww ~/tmux-sessionizer<CR>")
+
+
+vim.keymap.set("n", "<leader>t", ":let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>")
