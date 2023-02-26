@@ -1,4 +1,8 @@
 vim.g.mapleader = " "
+local function termcodes(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<cr>")
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -30,8 +34,8 @@ vim.keymap.set("n", "<C-j>", "<C-w>j")
 vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-k>", "<C-w>k")
 vim.keymap.set("n", "<C-l>", "<C-w>l")
-vim.keymap.set({ "n", "v" }, "<leader><Esc>", "<cmd>bdelete<cr>")
-vim.keymap.set("t", "<leader><Esc>", "<C-\\><C-N>")
+vim.keymap.set({ "n", "v" }, "<leader><Esc>", "<cmd>BufferKill<cr>")
+vim.keymap.set("t", "<leader><Esc>", termcodes "<C-\\><C-N>")
 
 vim.keymap.set("n", "<C-Up>", ":resize +2<CR>")
 vim.keymap.set("n", "<C-Down>", ":resize -2<CR>")
@@ -56,3 +60,12 @@ vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww ~/tmux-sessionizer<CR>")
 
 
 vim.keymap.set("n", "<leader>t", ":let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>")
+
+
+vim.keymap.set("n", "d", "\"_d")
+vim.keymap.set("v", "d", "\"_d")
+vim.keymap.set("n", "c", "\"_c")
+vim.keymap.set("v", "c", "\"_c")
+vim.keymap.set("v", "p", "\"_c<C-r><C-o>+<Esc>")
+
+vim.keymap.set("n", "<leader>n", ":tabnew<CR>")

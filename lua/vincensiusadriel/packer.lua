@@ -109,4 +109,10 @@ return require('packer').startup(function(use)
     use 'nvim-treesitter/nvim-treesitter-context'
 
     use 'simrat39/symbols-outline.nvim'
+
+    use {
+        'phaazon/hop.nvim',
+        branch = 'v2', -- optional but strongly recommended
+    }
+
 end)
