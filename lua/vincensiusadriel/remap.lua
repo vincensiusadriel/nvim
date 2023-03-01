@@ -37,10 +37,19 @@ vim.keymap.set("n", "<C-l>", "<C-w>l")
 vim.keymap.set({ "n", "v" }, "<leader><Esc>", "<cmd>BufferKill<cr>")
 vim.keymap.set("t", "<leader><Esc>", termcodes "<C-\\><C-N>")
 
-vim.keymap.set("n", "<C-Up>", ":resize +2<CR>")
-vim.keymap.set("n", "<C-Down>", ":resize -2<CR>")
-vim.keymap.set("n", "<C-Left>", ":vertical resize +2<CR>")
-vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>")
+
+
+if vim.fn.has "mac" == 1 or vim.fn.has "macunix" == 1 then
+    vim.keymap.set("n", "∆", ":resize -2<CR>")
+    vim.keymap.set("n", "˚", ":resize +2<CR>")
+    vim.keymap.set("n", "˙", ":vertical resize -2<CR>")
+    vim.keymap.set("n", "¬", ":vertical resize +2<CR>")
+else
+    vim.keymap.set("n", "<C-Up>", ":resize +2<CR>")
+    vim.keymap.set("n", "<C-Down>", ":resize -2<CR>")
+    vim.keymap.set("n", "<C-Left>", ":vertical resize +2<CR>")
+    vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>")
+end
 
 vim.keymap.set("n", "<leader>/", "<Plug>(comment_toggle_linewise_current)")
 vim.keymap.set("v", "<leader>/", "<Plug>(comment_toggle_linewise_visual)")
