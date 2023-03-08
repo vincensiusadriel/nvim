@@ -115,4 +115,9 @@ return require('packer').startup(function(use)
         branch = 'v2', -- optional but strongly recommended
     }
 
+
+    use {
+        "tpope/vim-surround",
+    }
+
 end)
