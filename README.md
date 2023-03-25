@@ -14,7 +14,11 @@ pip3 install pynvim
 ```
 
 required lazygit
-
 ```
 brew install lazygit
+```
+
+required luarocks (optional for lua editting)
+```
+sudo apt-get install -y luarocks
 ```
