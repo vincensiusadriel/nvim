@@ -14,6 +14,10 @@ require("nvim-tree").setup({
         mappings = {
             list = {
                 { key = "u", action = "dir_up" },
+                { key = { "l", "<CR>", "o" }, action = "edit", mode = "n" },
+                { key = "h", action = "close_node" },
+                { key = "v", action = "vsplit" },
+                { key = "C", action = "cd" },
             },
         },
     },
@@ -77,6 +81,10 @@ require("nvim-tree").setup({
     },
     filters = {
         dotfiles = false,
+        git_clean = false,
+        no_buffer = false,
+        custom = { "node_modules", "\\.cache" },
+        exclude = {},
     },
     diagnostics = {
         enable = true,
