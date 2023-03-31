@@ -120,4 +120,8 @@ return require('packer').startup(function(use)
         "tpope/vim-surround",
     }
 
+    use {
+        "christoomey/vim-tmux-navigator",
+    }
+
 end)
