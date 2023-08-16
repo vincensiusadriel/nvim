@@ -128,4 +128,8 @@ return require('packer').startup(function(use)
         "ThePrimeagen/harpoon",
     }
 
+    use {
+        "ray-x/lsp_signature.nvim",
+    }
+
 end)
