@@ -23,3 +23,13 @@ require 'nvim-treesitter.configs'.setup {
         additional_vim_regex_highlighting = false,
     },
 }
+
+vim.cmd("TSDisable highlight")
+
+vim.cmd([[
+augroup enable_tshighlight
+    autocmd!
+    autocmd VimEnter * TSEnable highlight
+augroup END
+]])
+-- vim.cmd("TSEnable highlight")

@@ -71,7 +71,7 @@ local plugins = {
             { 'quangnguyen30192/cmp-nvim-ultisnips' },
         }
     },
-    { 'fatih/vim-go', build = ':GoUpdateBinaries' },
+    { 'fatih/vim-go', build = ':GoUpdateBinaries', lazy = false },
     -- { "akinsho/toggleterm.nvim", version = '*', config = function()
     --     require("toggleterm").setup()
     -- end }
