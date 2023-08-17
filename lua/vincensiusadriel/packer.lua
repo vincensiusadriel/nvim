@@ -1,56 +1,58 @@
 -- Install packer
-local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-local is_bootstrap = false
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    is_bootstrap = true
-    vim.fn.system { 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path }
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
+vim.opt.rtp:prepend(lazypath)
 
-vim.cmd [[packadd packer.nvim]]
-return require('packer').startup(function(use)
-    use 'wbthomason/packer.nvim'
+vim.g.mapleader = " "
 
-    use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.0',
+local plugins = {
+    {
+        'junegunn/fzf',
+        build = ":call fzf#install()"
+    },
+    {
+        'nvim-telescope/telescope.nvim', version = '0.1.0',
         -- or                            , branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' }, { "kdheepak/lazygit.nvim" } }
-    }
-
-    use { 'nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' } }
-
-
-    use({
+        dependencies = { { 'nvim-lua/plenary.nvim' }, { "kdheepak/lazygit.nvim" } }
+    },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+    },
+    {
         'bluz71/vim-moonfly-colors',
-        branch = 'cterm-compat',
+        name = "moonfly",
+        lazy = false,
+        priority = 1000,
         config = function()
             vim.cmd [[colorscheme moonfly]]
         end
-    })
+    },
+    'nvim-treesitter/playground',
+    'mbbill/undotree',
+    'tpope/vim-fugitive',
 
-    use('nvim-treesitter/playground')
-    use('mbbill/undotree')
-    use('tpope/vim-fugitive')
 
     -- ultisnips setup
-    use('SirVer/ultisnips')
-    use({
-        "hrsh7th/nvim-cmp",
-        requires = {
-            "quangnguyen30192/cmp-nvim-ultisnips",
-            config = function()
-                -- optional call to setup (see customization section)
-                require("cmp_nvim_ultisnips").setup {}
-            end,
-            -- If you want to enable filetype detection based on treesitter:
-            -- requires = { "nvim-treesitter/nvim-treesitter" },
-        },
-    })
-
-    use {
+    {
         'VonHeikemen/lsp-zero.nvim',
-        requires = {
+        dependencies = {
             -- LSP Support
-            { 'williamboman/mason.nvim' },
+            {
+                'williamboman/mason.nvim',
+                build = function()
+                    pcall(vim.cmd, 'MasonUpdate')
+                end,
+            },
             { 'williamboman/mason-lspconfig.nvim' },
             { 'neovim/nvim-lspconfig' },
 
@@ -65,71 +67,50 @@ return require('packer').startup(function(use)
             -- Snippets
             { 'L3MON4D3/LuaSnip' },
             { 'rafamadriz/friendly-snippets' },
+            { 'SirVer/ultisnips' },
+            { 'quangnguyen30192/cmp-nvim-ultisnips' },
         }
-    }
-
-    use { 'fatih/vim-go', { run = ':GoUpdateBinaries' } }
-
-    -- use { "akinsho/toggleterm.nvim", tag = '*', config = function()
+    },
+    { 'fatih/vim-go', build = ':GoUpdateBinaries' },
+    -- { "akinsho/toggleterm.nvim", version = '*', config = function()
     --     require("toggleterm").setup()
     -- end }
-
-    use {
+    {
         'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup()
         end
-    }
-
-    use {
+    },
+    {
         "windwp/nvim-autopairs",
         config = function() require("nvim-autopairs").setup {} end
-    }
-
-    use {
+    },
+    {
         'nvim-tree/nvim-tree.lua',
-        requires = {
+        dependencies = {
             'nvim-tree/nvim-web-devicons', -- optional, for file icons
         },
-        tag = 'nightly' -- optional, updated every week. (see issue #1193)
-    }
-
-    use {
-        'lewis6991/gitsigns.nvim',
-        -- tag = 'release' -- To use the latest release (do not use this if you run Neovim nightly or dev builds!)
-    }
-
-    use {
+        version = 'nightly' -- optional, updated every week. (see issue #1193)
+    },
+    { 'lewis6991/gitsigns.nvim', version = 'v0.6' },
+    {
         'nvim-lualine/lualine.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-    }
-
-    use { 'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons' }
-
-    use 'nvim-treesitter/nvim-treesitter-context'
-
-    use 'simrat39/symbols-outline.nvim'
-
-    use {
+        dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true }
+    },
+    { 'akinsho/bufferline.nvim', version = "v3.*", dependencies = 'nvim-tree/nvim-web-devicons' },
+    'nvim-treesitter/nvim-treesitter-context',
+    'simrat39/symbols-outline.nvim',
+    {
         'phaazon/hop.nvim',
         branch = 'v2', -- optional but strongly recommended
-    }
+    },
+    "tpope/vim-surround",
+    "christoomey/vim-tmux-navigator",
+    "ThePrimeagen/harpoon",
+    "ray-x/lsp_signature.nvim",
+}
+
+local opts = {}
 
 
-    use {
-        "tpope/vim-surround",
-    }
-
-    use {
-        "christoomey/vim-tmux-navigator",
-    }
-
-    use {
-        "ThePrimeagen/harpoon",
-    }
-
-    use {
-        "ray-x/lsp_signature.nvim",
-    }
-
-end)
+require("lazy").setup(plugins, opts)

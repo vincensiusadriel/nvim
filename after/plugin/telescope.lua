@@ -18,3 +18,5 @@ vim.keymap.set('n', '<leader>st', builtin.live_grep, {})
 vim.keymap.set('n', '<C-g>', function()
     builtin.grep_string({ search = vim.fn.input("Grep > ") })
 end)
+
+vim.api.nvim_set_hl(0, "TelescopeBorder", { ctermbg = "none" })

@@ -1,22 +1,22 @@
 local lsp = require('lsp-zero')
-local cmp_setup = require('lsp-zero.nvim-cmp-setup')
 lsp.preset('recommended')
 
-
-lsp.ensure_installed({
+lsp.ensure_installed({ 'tsserver',
+    'eslint',
+    'rust_analyzer',
+    -- 'kotlin_language_server',
+    -- 'jdtls',
+    'lua_ls',
+    'jsonls',
+    'html',
+    'elixirls',
+    'tailwindcss',
+    'tflint',
+    'pylsp',
+    'dockerls',
+    'bashls',
+    -- 'marksman',
 })
-
--- Fix Undefined global 'vim'
-lsp.configure('sumneko_lua', {
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { 'vim' }
-            }
-        }
-    }
-})
-
 
 local cmp = require('cmp')
 local luasnip = require('luasnip')
@@ -28,6 +28,7 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<Tab>"] = cmp.mapping(
         function(fallback)
@@ -67,12 +68,11 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 
 local sources = {
     { name = "ultisnips" },
+    { name = "luasnip" },
+    { name = 'nvim_lsp' },
+    { name = 'path' },
+    { name = 'buffer' },
 }
-
--- append sources from default lsp zero
-for _, source in ipairs(cmp_setup.sources()) do
-    table.insert(sources, source)
-end
 
 lsp.setup_nvim_cmp({
     mapping = cmp_mappings,
@@ -102,6 +102,7 @@ lsp.on_attach(function(client, bufnr)
         return
     end
 
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
@@ -131,4 +132,17 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function()
         vim.lsp.buf.format()
     end,
+})
+
+
+-- `/` cmdline setup.
+cmp.setup.cmdline('/', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+        { name = 'buffer' }
+    }
+})
+
+cmp.setup({
+    sources = sources,
 })

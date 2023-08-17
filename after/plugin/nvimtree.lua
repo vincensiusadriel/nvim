@@ -7,19 +7,37 @@ vim.g.loaded_netrwPlugin = 1
 -- set termguicolors to enable highlight groups
 vim.opt.termguicolors = true
 
+
+local function my_on_attach(bufnr)
+    local api = require "nvim-tree.api"
+
+    local function opts(desc)
+        return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+
+    -- default mappings
+    api.config.mappings.default_on_attach(bufnr)
+
+    -- custom mappings
+    vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
+    vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open'))
+    vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Open'))
+
+end
+
 require("nvim-tree").setup({
     sort_by = "case_sensitive",
     view = {
         adaptive_size = true,
-        mappings = {
-            list = {
-                { key = "u", action = "dir_up" },
-                { key = { "l", "<CR>", "o" }, action = "edit", mode = "n" },
-                { key = "h", action = "close_node" },
-                { key = "v", action = "vsplit" },
-                { key = "C", action = "cd" },
-            },
-        },
+        -- mappings = {
+        --     list = {
+        --         { key = "u", action = "dir_up" },
+        --         { key = { "l", "<CR>", "o" }, action = "edit", mode = "n" },
+        --         { key = "h", action = "close_node" },
+        --         { key = "v", action = "vsplit" },
+        --         { key = "C", action = "cd" },
+        --     },
+        -- },
     },
     renderer = {
         add_trailing = false,
@@ -107,5 +125,6 @@ require("nvim-tree").setup({
         debounce_delay = 15,
         update_root = false,
         ignore_list = {},
-    }
+    },
+    on_attach = my_on_attach,
 })
