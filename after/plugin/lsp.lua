@@ -1,20 +1,21 @@
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
-lsp.ensure_installed({ 'tsserver',
-    'eslint',
+lsp.ensure_installed({
+    -- 'tsserver',
+    -- 'eslint',
     'rust_analyzer',
     -- 'kotlin_language_server',
     -- 'jdtls',
     'lua_ls',
-    'jsonls',
-    'html',
+    -- 'jsonls',
+    -- 'html',
     'elixirls',
-    'tailwindcss',
+    -- 'tailwindcss',
     'tflint',
     'pylsp',
-    'dockerls',
-    'bashls',
+    -- 'dockerls',
+    -- 'bashls',
     -- 'marksman',
 })
 
@@ -41,7 +42,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
                     cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
                 end
             end
-
         end,
         { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
     ),
