@@ -20,7 +20,8 @@ local plugins = {
         build = ":call fzf#install()"
     },
     {
-        'nvim-telescope/telescope.nvim', version = '0.1.0',
+        'nvim-telescope/telescope.nvim',
+        version = '0.1.0',
         -- or                            , branch = '0.1.x',
         dependencies = { { 'nvim-lua/plenary.nvim' }, { "kdheepak/lazygit.nvim" } }
     },
@@ -71,7 +72,7 @@ local plugins = {
             { 'quangnguyen30192/cmp-nvim-ultisnips' },
         }
     },
-    { 'fatih/vim-go', build = ':GoUpdateBinaries', lazy = false },
+    { 'fatih/vim-go',            build = ':GoUpdateBinaries', },
     -- { "akinsho/toggleterm.nvim", version = '*', config = function()
     --     require("toggleterm").setup()
     -- end }
@@ -90,7 +91,7 @@ local plugins = {
         dependencies = {
             'nvim-tree/nvim-web-devicons', -- optional, for file icons
         },
-        version = 'nightly' -- optional, updated every week. (see issue #1193)
+        version = 'nightly'                -- optional, updated every week. (see issue #1193)
     },
     { 'lewis6991/gitsigns.nvim', version = 'v0.6' },
     {
@@ -108,6 +109,8 @@ local plugins = {
     "christoomey/vim-tmux-navigator",
     "ThePrimeagen/harpoon",
     "ray-x/lsp_signature.nvim",
+
+
 }
 
 local opts = {}
