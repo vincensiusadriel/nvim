@@ -136,12 +136,21 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 
 -- `/` cmdline setup.
+-- ref : https://github.com/hrsh7th/nvim-cmp/issues/875
 cmp.setup.cmdline('/', {
-    mapping = cmp.mapping.preset.cmdline(),
+    mapping = cmp.mapping.preset.cmdline(), -- important!
     sources = {
         { name = 'buffer' }
     }
 })
+cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(), -- important!
+    sources = {
+        { name = 'nvim_lua' },
+        { name = 'cmdline' },
+    },
+})
+
 
 cmp.setup({
     sources = sources,
