@@ -144,28 +144,28 @@ cmp.setup.cmdline('/', {
     }
 })
 -- -- `:` cmdline setup.
--- cmp.setup.cmdline(':', {
---     mapping = cmp.mapping.preset.cmdline(),
---     sources = cmp.config.sources({
---         { name = 'path' }
---     }, {
---         {
---             name = 'cmdline',
---             option = {
---                 ignore_cmds = { 'Man', '!' }
---             }
---         }
---     })
--- })
+cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+        { name = 'path' }
+    }, {
+        {
+            name = 'cmdline',
+            option = {
+                ignore_cmds = { 'Man', '!' }
+            }
+        }
+    })
+})
 
 
 local cmp_action = require('lsp-zero').cmp_action()
 cmp.setup({
     sources = sources,
-    mapping = {
-        ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-        ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-        ['<Tab>'] = cmp_action.luasnip_supertab(),
-        ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-    },
+    -- mapping = {
+    --     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    --     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    --     ['<Tab>'] = cmp_action.luasnip_supertab(),
+    --     ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
+    -- },
 })
