@@ -21,7 +21,7 @@ local plugins = {
     },
     {
         'nvim-telescope/telescope.nvim',
-        version = '0.1.0',
+        version = '0.1.4',
         -- or                            , branch = '0.1.x',
         dependencies = { { 'nvim-lua/plenary.nvim' }, { "kdheepak/lazygit.nvim" } }
     },
@@ -110,22 +110,6 @@ local plugins = {
     "christoomey/vim-tmux-navigator",
     "ThePrimeagen/harpoon",
     "ray-x/lsp_signature.nvim",
-
-    {
-        "folke/noice.nvim",
-        event = "VeryLazy",
-        opts = {
-            -- add any options here
-        },
-        dependencies = {
-            -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-            "MunifTanjim/nui.nvim",
-            -- OPTIONAL:
-            --   `nvim-notify` is only needed, if you want to use the notification view.
-            --   If not available, we use `mini` as the fallback
-            "rcarriga/nvim-notify",
-        }
-    },
 
 }
 
