@@ -22,3 +22,9 @@ required luarocks (optional for lua editting)
 ```
 sudo apt-get install -y luarocks
 ```
+
+required fd and ripgrep 
+```
+brew install fd
+brew install ripgrep
+```
