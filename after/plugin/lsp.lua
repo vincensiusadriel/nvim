@@ -1,23 +1,25 @@
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
-lsp.ensure_installed({
-    -- 'tsserver',
-    -- 'eslint',
-    'rust_analyzer',
-    -- 'kotlin_language_server',
-    -- 'jdtls',
-    'lua_ls',
-    -- 'jsonls',
-    -- 'html',
-    'elixirls',
-    -- 'tailwindcss',
-    'tflint',
-    'pylsp',
-    -- 'dockerls',
-    -- 'bashls',
-    -- 'marksman',
-})
+
+
+-- lsp.ensure_installed({
+--     -- 'tsserver',
+--     -- 'eslint',
+--     'rust_analyzer',
+--     -- 'kotlin_language_server',
+--     -- 'jdtls',
+--     'lua_ls',
+--     -- 'jsonls',
+--     -- 'html',
+--     'elixirls',
+--     -- 'tailwindcss',
+--     'tflint',
+--     'pylsp',
+--     -- 'dockerls',
+--     -- 'bashls',
+--     -- 'marksman',
+-- })
 
 local cmp = require('cmp')
 local luasnip = require('luasnip')
@@ -74,7 +76,7 @@ local sources = {
     { name = 'buffer' },
 }
 
-lsp.setup_nvim_cmp({
+cmp.setup({
     mapping = cmp_mappings,
     sources = sources,
     snippet = {
@@ -168,4 +170,33 @@ cmp.setup({
     --     ['<Tab>'] = cmp_action.luasnip_supertab(),
     --     ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
     -- },
+})
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+    -- Replace the language servers listed here
+    -- with the ones you want to install
+    ensure_installed = {
+        -- 'tsserver',
+        -- 'eslint',
+        -- 'rust_analyzer',
+        -- 'kotlin_language_server',
+        -- 'jdtls',
+        -- 'lua_ls',
+        'lua_ls',
+        -- 'jsonls',
+        -- 'html',
+        -- 'elixirls',
+        -- 'tailwindcss',
+        -- 'tflint',
+        -- 'pylsp',
+        -- 'dockerls',
+        -- 'bashls',
+        -- 'marksman',
+    },
+    handlers = {
+        function(server_name)
+            require('lspconfig')[server_name].setup({})
+        end,
+    },
 })
