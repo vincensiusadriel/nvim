@@ -89,17 +89,13 @@ local plugins = {
     },
     {
         'nvim-tree/nvim-tree.lua',
-        dependencies = {
-            'nvim-tree/nvim-web-devicons', -- optional, for file icons
-        },
-        version = 'nightly'                -- optional, updated every week. (see issue #1193)
     },
     { 'lewis6991/gitsigns.nvim', version = 'v0.6' },
     {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true }
     },
-    { 'akinsho/bufferline.nvim', version = "v3.*", dependencies = 'nvim-tree/nvim-web-devicons' },
+    { 'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
     'nvim-treesitter/nvim-treesitter-context',
     'simrat39/symbols-outline.nvim',
     {

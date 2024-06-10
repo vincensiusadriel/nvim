@@ -15,14 +15,13 @@ require('bufferline').setup {
         close_icon = '',
         max_name_length = 18,
         max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
-        truncate_names = true, -- whether or not tab names should be truncated
+        truncate_names = true,  -- whether or not tab names should be truncated
         tab_size = 18,
         diagnostics = "nvim_lsp",
         diagnostics_update_in_insert = true,
         color_icons = false,
         show_buffer_icons = false, -- disable filetype icons for buffers
         show_buffer_close_icons = true,
-        show_buffer_default_icon = true,
         show_close_icon = true,
         show_tab_indicators = true,
         show_duplicate_prefix = false,
