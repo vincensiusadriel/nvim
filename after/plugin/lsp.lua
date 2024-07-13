@@ -22,45 +22,18 @@ lsp.preset('recommended')
 -- })
 
 local cmp = require('cmp')
-local luasnip = require('luasnip')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
+local cmp_action = require('lsp-zero').cmp_action()
+local cmp_format = require('lsp-zero').cmp_format({ details = true })
 
--- ultisnip
-local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<C-Space>"] = cmp.mapping.complete(),
-    ["<Tab>"] = cmp.mapping(
-        function(fallback)
-            if cmp.visible() then
-                cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-            else
-                if luasnip.expand_or_locally_jumpable() then
-                    luasnip.jump(1)
-                else
-                    cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-                end
-            end
-        end,
-        { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
-    ),
-    ["<S-Tab>"] = cmp.mapping(
-        function(fallback)
-            if cmp.visible() then
-                cmp_ultisnips_mappings.jump_backwards(fallback)
-            else
-                if luasnip.jumpable(-1) then
-                    luasnip.jump(-1)
-                else
-                    cmp_ultisnips_mappings.jump_backwards(fallback)
-                end
-            end
-        end,
-        { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
-    ),
+    ['<Tab>'] = cmp_action.luasnip_supertab(),
+    ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
 })
 
 -- disable completion with tab
@@ -69,21 +42,23 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 -- cmp_mappings['<S-Tab>'] = nil
 
 local sources = {
-    { name = "ultisnips" },
     { name = "luasnip" },
     { name = 'nvim_lsp' },
     { name = 'path' },
     { name = 'buffer' },
 }
 
+require('luasnip.loaders.from_vscode').lazy_load()
+
 cmp.setup({
     mapping = cmp_mappings,
     sources = sources,
     snippet = {
         expand = function(args)
-            vim.fn["UltiSnips#Anon"](args.body)
+            require('luasnip').lsp_expand(args.body)
         end,
     },
+    formatting = cmp_format,
 })
 
 lsp.set_preferences({
@@ -158,18 +133,6 @@ cmp.setup.cmdline(':', {
             }
         }
     })
-})
-
-
-local cmp_action = require('lsp-zero').cmp_action()
-cmp.setup({
-    sources = sources,
-    -- mapping = {
-    --     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    --     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-    --     ['<Tab>'] = cmp_action.luasnip_supertab(),
-    --     ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-    -- },
 })
 
 require('mason').setup({})
