@@ -82,3 +82,7 @@ vim.keymap.set("v", "c", "\"_c")
 vim.keymap.set("v", "p", "\"_c<C-r><C-o>+<Esc>")
 
 vim.keymap.set("n", "<leader>n", ":tabnew<CR>")
+
+-- stay indent mode
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
