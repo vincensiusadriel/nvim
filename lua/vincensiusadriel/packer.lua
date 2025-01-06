@@ -119,6 +119,17 @@ local plugins = {
     "christoomey/vim-tmux-navigator",
     "ThePrimeagen/harpoon",
     "ray-x/lsp_signature.nvim",
+    -- codeverse integration
+    -- {
+    --     "https://code.byted.org/chenjiaqi.cposture/codeverse.vim.git",
+    --     dependencies = {
+    --         "hrsh7th/nvim-cmp",
+    --     },
+    --     config = function()
+    --         require("codeverse").setup({
+    --         })
+    --     end
+    -- }
 
 }
 

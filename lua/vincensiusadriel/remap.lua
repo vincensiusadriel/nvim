@@ -92,3 +92,11 @@ vim.keymap.set("n", "<leader>j", ":cnext<CR>")
 vim.keymap.set("n", "<leader>h", ":colder<CR>")
 vim.keymap.set("n", "<leader>k", ":cprev<CR>")
 vim.keymap.set("n", "<leader>l", ":cnewer<CR>")
+
+
+-- codeverse
+-- vim.keymap.set('i', '<C-]>', '<Plug>(codeverse-next-or-complete)', { noremap = false, silent = true })
+
+vim.api.nvim_create_user_command('GoCover', function()
+    vim.cmd('GoCoverage -p')
+end, {})

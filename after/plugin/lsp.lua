@@ -25,15 +25,15 @@ local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_action = require('lsp-zero').cmp_action()
 local cmp_format = require('lsp-zero').cmp_format({ details = true })
-
 local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<C-Space>"] = cmp.mapping.complete(),
-    ['<Tab>'] = cmp_action.luasnip_supertab(),
-    ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
+    -- ['<Tab>'] = cmp_action.luasnip_supertab(),
+    -- ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
+    ['<S-Tab>'] = cmp_action.luasnip_jump_forward(),
 })
 
 -- disable completion with tab
@@ -42,6 +42,7 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 -- cmp_mappings['<S-Tab>'] = nil
 
 local sources = {
+    -- { name = "codeverse" },
     { name = "luasnip" },
     { name = 'nvim_lsp' },
     { name = 'path' },
@@ -162,3 +163,24 @@ require('mason-lspconfig').setup({
         end,
     },
 })
+
+local mason_registry = require("mason-registry")
+local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
+    .. "/node_modules/@vue/language-server"
+
+local lspconfig = require("lspconfig")
+
+lspconfig.tsserver.setup({
+    init_options = {
+        plugins = {
+            {
+                name = "@vue/typescript-plugin",
+                location = vue_language_server_path,
+                languages = { "vue" },
+            },
+        },
+    },
+    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+})
+
+lspconfig.volar.setup({})
