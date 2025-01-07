@@ -44,10 +44,10 @@ vim.keymap.set("t", "<leader><Esc>", termcodes "<C-\\><C-N>")
 
 
 if vim.fn.has "mac" == 1 or vim.fn.has "macunix" == 1 then
-    vim.keymap.set("n", "∆", ":resize -2<CR>")
-    vim.keymap.set("n", "˚", ":resize +2<CR>")
-    vim.keymap.set("n", "˙", ":vertical resize -2<CR>")
-    vim.keymap.set("n", "¬", ":vertical resize +2<CR>")
+    vim.keymap.set("n", "<A-Up>", ":resize +2<CR>")
+    vim.keymap.set("n", "<A-Down>", ":resize -2<CR>")
+    vim.keymap.set("n", "<A-Left>", ":vertical resize -2<CR>")
+    vim.keymap.set("n", "<A-Right>", ":vertical resize +2<CR>")
 else
     vim.keymap.set("n", "<C-Up>", ":resize +2<CR>")
     vim.keymap.set("n", "<C-Down>", ":resize -2<CR>")
@@ -93,10 +93,30 @@ vim.keymap.set("n", "<leader>h", ":colder<CR>")
 vim.keymap.set("n", "<leader>k", ":cprev<CR>")
 vim.keymap.set("n", "<leader>l", ":cnewer<CR>")
 
-
 -- codeverse
 -- vim.keymap.set('i', '<C-]>', '<Plug>(codeverse-next-or-complete)', { noremap = false, silent = true })
 
 vim.api.nvim_create_user_command('GoCover', function()
     vim.cmd('GoCoverage -p')
 end, {})
+
+
+-- Function to toggle Quickfix list
+function ToggleQuickfix()
+    local quickfix_open = false
+    for _, win in ipairs(vim.fn.getwininfo()) do
+        if win.quickfix == 1 then
+            quickfix_open = true
+            break
+        end
+    end
+
+    if quickfix_open then
+        vim.cmd('cclose') -- Close the Quickfix list
+    else
+        vim.cmd('copen')  -- Open the Quickfix list
+    end
+end
+
+-- Map the function to a key (e.g., <leader>q)
+vim.keymap.set('n', '<leader>q', ToggleQuickfix, { noremap = true, silent = true })
