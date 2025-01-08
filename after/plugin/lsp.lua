@@ -184,3 +184,13 @@ lspconfig.tsserver.setup({
 })
 
 lspconfig.volar.setup({})
+
+-- to resolve expected language not started
+vim.filetype.add({ extension = { templ = "templ" } })
+
+lspconfig.html.setup({
+    filetypes = { "html", "templ" },
+})
+lspconfig.htmx.setup({
+    filetypes = { "html", "templ" },
+})
