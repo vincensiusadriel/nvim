@@ -22,7 +22,6 @@ local function my_on_attach(bufnr)
     vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
     vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open'))
     vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Open'))
-
 end
 
 require("nvim-tree").setup({
@@ -101,7 +100,7 @@ require("nvim-tree").setup({
         dotfiles = false,
         git_clean = false,
         no_buffer = false,
-        custom = { "node_modules", "\\.cache" },
+        custom = { "\\.cache" },
         exclude = {},
     },
     diagnostics = {
