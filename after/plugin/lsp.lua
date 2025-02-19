@@ -1,26 +1,6 @@
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
-
-
--- lsp.ensure_installed({
---     -- 'tsserver',
---     -- 'eslint',
---     'rust_analyzer',
---     -- 'kotlin_language_server',
---     -- 'jdtls',
---     'lua_ls',
---     -- 'jsonls',
---     -- 'html',
---     'elixirls',
---     -- 'tailwindcss',
---     'tflint',
---     'pylsp',
---     -- 'dockerls',
---     -- 'bashls',
---     -- 'marksman',
--- })
-
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_action = require('lsp-zero').cmp_action()
@@ -140,22 +120,37 @@ require('mason-lspconfig').setup({
     -- Replace the language servers listed here
     -- with the ones you want to install
     ensure_installed = {
-        -- 'tsserver',
-        -- 'eslint',
-        -- 'rust_analyzer',
-        -- 'kotlin_language_server',
-        -- 'jdtls',
-        -- 'lua_ls',
+        'bashls',
+        'cssls',
+        'css_variables',
+        'cssmodules_ls',
+        'elixirls',
+        -- 'gci',
+        -- 'gofumpt',
+        -- 'goimports',
+        -- 'golangci-lint',
+        -- 'golines',
+        -- 'gomodifytags',
+        'gopls',
+        -- 'gotests',
+        -- 'gotestsum',
+        'html',
+        -- 'htmlhint',
+        'htmx',
         'lua_ls',
-        -- 'jsonls',
-        -- 'html',
-        -- 'elixirls',
-        -- 'tailwindcss',
-        -- 'tflint',
-        -- 'pylsp',
-        -- 'dockerls',
-        -- 'bashls',
-        -- 'marksman',
+        'pylsp',
+        'quick_lint_js',
+        'rust_analyzer',
+        -- 'shfmt',
+        'tailwindcss',
+        'templ',
+        'tflint',
+        'thriftls',
+        'tsserver',
+        'volar',
+        -- 'yamlfmt',
+        -- 'yamllint',
+        'emmet_ls',
     },
     handlers = {
         function(server_name)
@@ -188,9 +183,23 @@ lspconfig.volar.setup({})
 -- to resolve expected language not started
 vim.filetype.add({ extension = { templ = "templ" } })
 
-lspconfig.html.setup({
-    filetypes = { "html", "templ" },
-})
 lspconfig.htmx.setup({
     filetypes = { "html", "templ" },
+})
+
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+lspconfig.emmet_ls.setup({
+    -- on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "templ", "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+    init_options = {
+        html = {
+            options = {
+                -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+                ["bem.enabled"] = true,
+            },
+        },
+    }
 })
