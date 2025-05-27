@@ -92,6 +92,9 @@ vim.keymap.set("n", "<leader>j", ":cnext<CR>")
 vim.keymap.set("n", "<leader>h", ":colder<CR>")
 vim.keymap.set("n", "<leader>k", ":cprev<CR>")
 vim.keymap.set("n", "<leader>l", ":cnewer<CR>")
+vim.keymap.set("n", "<leader>o", ":copen<CR>")
+vim.keymap.set("n", "<leader>c", ":cclose<CR>")
+
 
 -- codeverse
 -- vim.keymap.set('i', '<C-]>', '<Plug>(codeverse-next-or-complete)', { noremap = false, silent = true })
