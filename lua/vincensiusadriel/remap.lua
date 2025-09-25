@@ -38,7 +38,7 @@ vim.keymap.set("n", "<C-j>", ":<C-u>TmuxNavigateDown<cr>")
 vim.keymap.set("n", "<C-h>", ":<C-u>TmuxNavigateLeft<cr>")
 vim.keymap.set("n", "<C-k>", ":<C-u>TmuxNavigateUp<cr>")
 vim.keymap.set("n", "<C-l>", ":<C-u>TmuxNavigateRight<cr>")
-vim.keymap.set({ "n", "v" }, "<leader><Esc>", "<cmd>BufferKill<cr>")
+vim.keymap.set({ "n" }, "<Esc>", "<cmd>BufferKill<cr>")
 vim.keymap.set("t", "<leader><Esc>", termcodes "<C-\\><C-N>")
 
 
