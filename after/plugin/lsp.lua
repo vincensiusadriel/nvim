@@ -13,7 +13,8 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     ["<C-Space>"] = cmp.mapping.complete(),
     -- ['<Tab>'] = cmp_action.luasnip_supertab(),
     -- ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-    ['<S-Tab>'] = cmp_action.luasnip_jump_forward(),
+    ['<Tab>'] = cmp_action.luasnip_jump_forward(),
+    ['<S-Tab>'] = cmp_action.luasnip_jump_backward(),
 })
 
 -- disable completion with tab
