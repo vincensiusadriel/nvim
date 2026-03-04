@@ -24,8 +24,8 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 
 local sources = {
     -- { name = "codeverse" },
-    { name = "luasnip" },
     { name = 'nvim_lsp' },
+    { name = "luasnip" },
     { name = 'path' },
     { name = 'buffer' },
 }
