@@ -18,7 +18,6 @@ require('bufferline').setup {
         truncate_names = true,  -- whether or not tab names should be truncated
         tab_size = 18,
         diagnostics = "nvim_lsp",
-        diagnostics_update_in_insert = true,
         color_icons = false,
         show_buffer_icons = false, -- disable filetype icons for buffers
         show_buffer_close_icons = true,

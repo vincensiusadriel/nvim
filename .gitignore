@@ -1,2 +1,5 @@
 plugin/*
 .netrwhist
+.opencode
+.ttadk
+opencode.jsonc

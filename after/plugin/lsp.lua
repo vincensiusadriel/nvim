@@ -1,20 +1,30 @@
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
 local cmp = require('cmp')
+local cmp_nvim_lsp = require('cmp_nvim_lsp')
+local luasnip = require('luasnip')
+
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_action = require('lsp-zero').cmp_action()
-local cmp_format = require('lsp-zero').cmp_format({ details = true })
-local cmp_mappings = lsp.defaults.cmp_mappings({
+local cmp_mappings = cmp.mapping.preset.insert({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<C-Space>"] = cmp.mapping.complete(),
-    -- ['<Tab>'] = cmp_action.luasnip_supertab(),
-    -- ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-    ['<Tab>'] = cmp_action.luasnip_jump_forward(),
-    ['<S-Tab>'] = cmp_action.luasnip_jump_backward(),
+    ['<Tab>'] = cmp.mapping(function(fallback)
+        if luasnip.jumpable(1) then
+            luasnip.jump(1)
+            return
+        end
+
+        fallback()
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+            return
+        end
+
+        fallback()
+    end, { 'i', 's' }),
 })
 
 -- disable completion with tab
@@ -32,6 +42,8 @@ local sources = {
 
 require('luasnip.loaders.from_vscode').lazy_load()
 
+local capabilities = cmp_nvim_lsp.default_capabilities()
+
 cmp.setup({
     mapping = cmp_mappings,
     sources = sources,
@@ -40,42 +52,45 @@ cmp.setup({
             require('luasnip').lsp_expand(args.body)
         end,
     },
-    formatting = cmp_format,
 })
 
-lsp.set_preferences({
-    suggest_lsp_servers = false,
-    sign_icons = {
-        error = 'E',
-        warn = 'W',
-        hint = 'H',
-        info = 'I'
-    }
+for type, icon in pairs({ error = 'E', warn = 'W', hint = 'H', info = 'I' }) do
+    local hl = 'DiagnosticSign' .. type:sub(1, 1):upper() .. type:sub(2)
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
+end
+
+local lsp_attach_group = vim.api.nvim_create_augroup('user_lsp_attach', { clear = true })
+vim.api.nvim_create_autocmd('LspAttach', {
+    group = lsp_attach_group,
+    callback = function(event)
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if not client then
+            return
+        end
+
+        if client.name == 'eslint' then
+            vim.schedule(function()
+                vim.lsp.stop_client(client.id)
+            end)
+            return
+        end
+
+        local opts = { buffer = event.buf, remap = false }
+
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+        vim.keymap.set('n', '<leader>vws', vim.lsp.buf.workspace_symbol, opts)
+        vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, opts)
+        vim.keymap.set('n', '[d', vim.diagnostic.goto_next, opts)
+        vim.keymap.set('n', ']d', vim.diagnostic.goto_prev, opts)
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+        -- vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, opts)
+    end,
 })
-
-lsp.on_attach(function(client, bufnr)
-    local opts = { buffer = bufnr, remap = false }
-
-    if client.name == "eslint" then
-        vim.cmd.LspStop('eslint')
-        return
-    end
-
-    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-    vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
-    vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-    vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-    vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-    -- vim.keymap.set("i", "<C-h>"n vim.lsp.buf.signature_help, opts)
-end)
-
-lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true,
@@ -83,12 +98,11 @@ vim.diagnostic.config({
 })
 
 -- add format on save
-vim.api.nvim_create_augroup("lsp_format_on_save", {})
-vim.api.nvim_create_autocmd("BufWritePre", {
-    group = "lsp_format_on_save",
-    pattern = "*",
-    callback = function()
-        vim.lsp.buf.format()
+vim.api.nvim_create_autocmd('BufWritePre', {
+    group = vim.api.nvim_create_augroup('lsp_format_on_save', { clear = true }),
+    pattern = '*',
+    callback = function(args)
+        vim.lsp.buf.format({ bufnr = args.buf })
     end,
 })
 
@@ -118,8 +132,6 @@ cmp.setup.cmdline(':', {
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    -- Replace the language servers listed here
-    -- with the ones you want to install
     ensure_installed = {
         'bashls',
         'cssls',
@@ -147,54 +159,51 @@ require('mason-lspconfig').setup({
         'templ',
         'tflint',
         'thriftls',
-        'tsserver',
-        'volar',
+        'ts_ls',
+        'vue_ls',
         -- 'yamlfmt',
         -- 'yamllint',
         'emmet_ls',
     },
-    handlers = {
-        function(server_name)
-            require('lspconfig')[server_name].setup({})
-        end,
-    },
+    automatic_enable = false,
 })
 
-local mason_registry = require("mason-registry")
-local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
-    .. "/node_modules/@vue/language-server"
+local mason_settings = require('mason.settings')
+local vue_language_server_path = vim.fs.joinpath(
+    mason_settings.current.install_root_dir,
+    'packages',
+    'vue-language-server',
+    'node_modules',
+    '@vue',
+    'language-server'
+)
 
-local lspconfig = require("lspconfig")
+vim.filetype.add({ extension = { templ = 'templ' } })
 
-lspconfig.tsserver.setup({
+vim.lsp.config('*', {
+    capabilities = capabilities,
+})
+
+vim.lsp.config('ts_ls', {
     init_options = {
+        hostInfo = 'neovim',
         plugins = {
             {
-                name = "@vue/typescript-plugin",
+                name = '@vue/typescript-plugin',
                 location = vue_language_server_path,
-                languages = { "vue" },
+                languages = { 'vue' },
             },
         },
     },
-    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
 })
 
-lspconfig.volar.setup({})
-
--- to resolve expected language not started
-vim.filetype.add({ extension = { templ = "templ" } })
-
-lspconfig.htmx.setup({
-    filetypes = { "html", "templ" },
+vim.lsp.config('htmx', {
+    filetypes = { 'html', 'templ' },
 })
 
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-lspconfig.emmet_ls.setup({
-    -- on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { "templ", "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+vim.lsp.config('emmet_ls', {
+    filetypes = { 'templ', 'css', 'eruby', 'html', 'javascript', 'javascriptreact', 'less', 'sass', 'scss', 'svelte', 'pug', 'typescriptreact', 'vue' },
     init_options = {
         html = {
             options = {
@@ -203,4 +212,26 @@ lspconfig.emmet_ls.setup({
             },
         },
     }
+})
+
+vim.lsp.enable({
+    'bashls',
+    'cssls',
+    'css_variables',
+    'cssmodules_ls',
+    'elixirls',
+    'gopls',
+    'html',
+    'htmx',
+    'lua_ls',
+    'pylsp',
+    'quick_lint_js',
+    'rust_analyzer',
+    'tailwindcss',
+    'templ',
+    'tflint',
+    'thriftls',
+    'ts_ls',
+    'vue_ls',
+    'emmet_ls',
 })

@@ -1,6 +1,6 @@
 -- Install packer
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -21,12 +21,13 @@ local plugins = {
     },
     {
         'nvim-telescope/telescope.nvim',
-        version = '0.1.4',
+        version = '*',
         -- or                            , branch = '0.1.x',
         dependencies = { { 'nvim-lua/plenary.nvim' }, { "kdheepak/lazygit.nvim" } }
     },
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "main", -- Ensure this is set to main
         build = ":TSUpdate",
     },
     {
@@ -38,15 +39,13 @@ local plugins = {
             vim.cmd [[colorscheme moonfly]]
         end
     },
-    'nvim-treesitter/playground',
     'mbbill/undotree',
     'tpope/vim-fugitive',
     -- { 'folke/tokyonight.nvim' },
 
-
     -- LSP setup
     {
-        'VonHeikemen/lsp-zero.nvim',
+        'neovim/nvim-lspconfig',
         dependencies = {
             -- LSP Support
             {
@@ -56,7 +55,6 @@ local plugins = {
                 end,
             },
             { 'williamboman/mason-lspconfig.nvim' },
-            { 'neovim/nvim-lspconfig' },
 
             -- Autocompletion
             { 'hrsh7th/nvim-cmp' },
@@ -112,8 +110,8 @@ local plugins = {
     'nvim-treesitter/nvim-treesitter-context',
     'simrat39/symbols-outline.nvim',
     {
-        'phaazon/hop.nvim',
-        branch = 'v2', -- optional but strongly recommended
+        'vincensiusadriel/hop.nvim',
+        branch = 'master', -- optional but strongly recommended
     },
     "tpope/vim-surround",
     "christoomey/vim-tmux-navigator",
@@ -139,10 +137,65 @@ local plugins = {
         build = function()
             vim.fn['mkdp#util#install']()
         end,
-    }
+    },
+    -- {
+    --     "nickjvandyke/opencode.nvim",
+    --     version = "*", -- Latest stable release
+    --     dependencies = {
+    --         {
+    --             -- `snacks.nvim` integration is recommended, but optional
+    --             ---@module "snacks" <- Loads `snacks.nvim` types for configuration intellisense
+    --             "folke/snacks.nvim",
+    --             optional = true,
+    --             opts = {
+    --                 input = {}, -- Enhances `ask()`
+    --                 picker = {  -- Enhances `select()`
+    --                     actions = {
+    --                         opencode_send = function(...) return require("opencode").snacks_picker_send(...) end,
+    --                     },
+    --                     win = {
+    --                         input = {
+    --                             keys = {
+    --                                 ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+    --                             },
+    --                         },
+    --                     },
+    --                 },
+    --             },
+    --         },
+    --     },
+    --     config = function()
+    --         ---@type opencode.Opts
+    --         vim.g.opencode_opts = {
+    --             -- Your configuration, if any; goto definition on the type or field for details
+    --         }
+
+    --         vim.o.autoread = true -- Required for `opts.events.reload`
+
+    --         -- Recommended/example keymaps
+    --         vim.keymap.set({ "n", "x" }, "<leader>oa",
+    --             function() require("opencode").ask("@this: ", { submit = true }) end,
+    --             { desc = "Ask opencode…" })
+    --         vim.keymap.set({ "n", "x" }, "<leader>ox", function() require("opencode").select() end,
+    --             { desc = "Execute opencode action…" })
+    --         vim.keymap.set({ "n", "t" }, "<leader>ot", function() require("opencode").toggle() end,
+    --             { desc = "Toggle opencode" })
+
+    --         vim.keymap.set({ "n", "x" }, "<leader>oo", function() return require("opencode").operator("@this ") end,
+    --             { desc = "Add range to opencode", expr = true })
+    --         vim.keymap.set("n", "<leader>ooo", function() return require("opencode").operator("@this ") .. "_" end,
+    --             { desc = "Add line to opencode", expr = true })
+    --     end,
+    -- }
 }
 
 local opts = {}
 
+-- Compatibility shim for Nvim 0.12 — plugins still use the deprecated vim.lsp.buf_get_clients(bufnr)
+vim.lsp.buf_get_clients = function(bufnr)
+    return vim.lsp.get_clients({ bufnr = bufnr or 0 })
+end
+
+-- Nvim 0.12 compat: vim.treesitter.ft_to_lang removed, use language.get_lang instead
 
 require("lazy").setup(plugins, opts)

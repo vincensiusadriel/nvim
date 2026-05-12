@@ -1,7 +1,7 @@
 # nvim
 config for nvim
 
-required nvim v0.8.1 above
+required nvim v0.12.0 above
 ```
 brew install neovim
 ```
@@ -16,6 +16,11 @@ pip3 install pynvim
 required lazygit
 ```
 brew install lazygit
+```
+
+required tree-sitter-cli
+```
+brew install tree-sitter-cli
 ```
 
 required luarocks (optional for lua editting)
