@@ -187,6 +187,133 @@ local plugins = {
     --             { desc = "Add line to opencode", expr = true })
     --     end,
     -- }
+    {
+        "NickvanDyke/opencode.nvim",
+        dependencies = {
+            -- Recommended for `ask()` and `select()`.
+            ---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
+            {
+                "folke/snacks.nvim",
+                lazy = false,
+                priority = 1000,
+                opts = { input = {}, picker = {}, terminal = {} },
+            },
+        },
+        keys = {
+            { "<leader>oa",  function() require("opencode").ask("@this: ", { submit = true }) end, mode = { "n", "x" }, desc = "Ask opencode" },
+            { "<leader>op",  function() require("opencode").ask("", { submit = true }) end,        mode = { "n", "x" }, desc = "Prompt opencode" },
+            { "<leader>ox",  function() require("opencode").select() end,                          mode = { "n", "x" }, desc = "Execute opencode action" },
+            { "<leader>ot",  function() require("opencode").toggle() end,                          mode = { "n", "t" }, desc = "Toggle opencode" },
+            { "<leader>ocr", function() return require("opencode").operator("@this ") end,         mode = { "n", "x" }, expr = true,                     desc = "Concat range to opencode" },
+            { "<leader>ocl", function() return require("opencode").operator("@this ") .. "_" end,  mode = "n",          expr = true,                     desc = "Concat line to opencode" },
+            { "<leader>ou",  function() require("opencode").command("session.half.page.up") end,   mode = "n",          desc = "Opencode half page up" },
+            { "<leader>od",  function() require("opencode").command("session.half.page.down") end, mode = "n",          desc = "Opencode half page down" },
+            { "<leader>on",  function() require("opencode").command("agent.cycle") end,            mode = "n",          desc = "Cycle opencode agent" },
+            {
+                "<leader>ocs",
+                function()
+                    local mode = vim.fn.mode()
+                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "x", true)
+
+                    vim.schedule(function()
+                        local start_pos = vim.fn.getpos("'<")
+                        local end_pos = vim.fn.getpos("'>")
+                        local lines = vim.fn.getregion(start_pos, end_pos, { type = mode })
+                        local text = table.concat(lines, "\n")
+
+                        require("opencode").prompt(text, { submit = false })
+                    end)
+                end,
+                mode = "x",
+                desc = "Concat selection to opencode"
+            },
+        },
+        config = function()
+            -- local opencode_cmd = "opencode --port"
+            local opencode_cmd = "ttadk code" --bytedance adk
+            local opencode_pane_id = nil
+            local opencode_visible = false
+
+            --- Check if tracked pane still exists in tmux
+            local function pane_exists()
+                if not opencode_pane_id then
+                    return false
+                end
+                local check = vim.fn.system("tmux has-session -t " .. opencode_pane_id .. " 2>/dev/null; echo $?")
+                if vim.trim(check) == "0" then
+                    return true
+                end
+                opencode_pane_id = nil
+                opencode_visible = false
+                return false
+            end
+
+            local function start()
+                if pane_exists() and opencode_visible then
+                    return
+                end
+                if pane_exists() then
+                    -- Restore hidden pane back into the current window
+                    vim.fn.system("tmux join-pane -h -l 35% -s " .. opencode_pane_id)
+                else
+                    -- Create a new tmux pane and capture its ID
+                    local result = vim.fn.system("tmux split-window -h -l 35% -P -F '#{pane_id}' " ..
+                        vim.fn.shellescape(opencode_cmd))
+                    opencode_pane_id = vim.trim(result)
+                    -- Return focus to the Neovim pane
+                    vim.fn.system("tmux select-pane -l")
+                end
+                opencode_visible = true
+            end
+
+            local function stop()
+                if not pane_exists() then
+                    return
+                end
+                vim.fn.system("tmux send-keys -t " .. opencode_pane_id .. " C-c")
+                vim.defer_fn(function()
+                    vim.fn.system("tmux kill-pane -t " .. opencode_pane_id)
+                    opencode_pane_id = nil
+                    opencode_visible = false
+                end, 500)
+            end
+
+            local function toggle()
+                if not pane_exists() then
+                    start()
+                elseif opencode_visible then
+                    -- Hide pane without killing it (preserves opencode session)
+                    vim.fn.system("tmux break-pane -d -s " .. opencode_pane_id)
+                    opencode_visible = false
+                else
+                    -- Restore hidden pane
+                    vim.fn.system("tmux join-pane -h -l 35% -s " .. opencode_pane_id)
+                    opencode_visible = true
+                end
+            end
+
+            -- Clean up hidden pane on Neovim exit
+            vim.api.nvim_create_autocmd("VimLeavePre", {
+                callback = function()
+                    if pane_exists() then
+                        vim.fn.system("tmux kill-pane -t " .. opencode_pane_id)
+                    end
+                end,
+            })
+
+            ---@type opencode.Opts
+            vim.g.opencode_opts = {
+                server = {
+                    start = start,
+                    stop = stop,
+                    toggle = toggle,
+                },
+            }
+
+            -- Required for `opts.events.reload`.
+            vim.o.autoread = true
+        end,
+    },
 }
 
 local opts = {}
