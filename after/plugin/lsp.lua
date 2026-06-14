@@ -149,9 +149,9 @@ require('mason-lspconfig').setup({
         -- 'gotestsum',
         'html',
         -- 'htmlhint',
-        'htmx',
+        -- 'htmx',
         'lua_ls',
-        'pylsp',
+        -- 'pylsp',
         'quick_lint_js',
         'rust_analyzer',
         -- 'shfmt',
@@ -198,9 +198,9 @@ vim.lsp.config('ts_ls', {
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
 })
 
-vim.lsp.config('htmx', {
-    filetypes = { 'html', 'templ' },
-})
+-- vim.lsp.config('htmx', {
+--     filetypes = { 'html', 'templ' },
+-- })
 
 vim.lsp.config('emmet_ls', {
     filetypes = { 'templ', 'css', 'eruby', 'html', 'javascript', 'javascriptreact', 'less', 'sass', 'scss', 'svelte', 'pug', 'typescriptreact', 'vue' },
@@ -222,9 +222,9 @@ vim.lsp.enable({
     'elixirls',
     'gopls',
     'html',
-    'htmx',
+    -- 'htmx',
     'lua_ls',
-    'pylsp',
+    -- 'pylsp',
     'quick_lint_js',
     'rust_analyzer',
     'tailwindcss',
