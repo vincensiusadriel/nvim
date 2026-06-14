@@ -229,8 +229,8 @@ local plugins = {
             },
         },
         config = function()
-            -- local opencode_cmd = "opencode --port"
-            local opencode_cmd = "ttadk code" --bytedance adk
+            local opencode_cmd = "opencode --port"
+            -- local opencode_cmd = "ttadk code" --bytedance adk
             local opencode_pane_id = nil
             local opencode_visible = false
 
