@@ -40,7 +40,7 @@ local sources = {
     { name = 'buffer' },
 }
 
-require('luasnip.loaders.from_vscode').lazy_load()
+-- require('luasnip.loaders.from_vscode').lazy_load()
 
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
@@ -133,37 +133,41 @@ cmp.setup.cmdline(':', {
 require('mason').setup({})
 require('mason-lspconfig').setup({
     ensure_installed = {
-        'bashls',
-        'cssls',
-        'css_variables',
-        'cssmodules_ls',
-        'elixirls',
+        -- 'bashls',
+        -- 'cssls',
+        -- 'css_variables',
+        -- 'cssmodules_ls',
+        -- 'elixirls',
+        -- 'gopls',
+        -- 'html',
+        -- 'lua_ls',
+        -- 'quick_lint_js',
+        -- 'rust_analyzer',
+        -- 'tailwindcss',
+        -- 'templ',
+        -- 'tflint',
+        -- 'thriftls',
+        -- 'ts_ls',
+        -- 'vue_ls',
+        -- 'emmet_ls',
+
+
+
+        -- DEPRECATED
+        -- 'yamlfmt',
+        -- 'yamllint',
+        -- 'shfmt',
+        -- 'pylsp',
+        -- 'htmlhint',
         -- 'gci',
         -- 'gofumpt',
         -- 'goimports',
         -- 'golangci-lint',
         -- 'golines',
         -- 'gomodifytags',
-        'gopls',
         -- 'gotests',
         -- 'gotestsum',
-        'html',
-        -- 'htmlhint',
         -- 'htmx',
-        'lua_ls',
-        -- 'pylsp',
-        'quick_lint_js',
-        'rust_analyzer',
-        -- 'shfmt',
-        'tailwindcss',
-        'templ',
-        'tflint',
-        'thriftls',
-        'ts_ls',
-        'vue_ls',
-        -- 'yamlfmt',
-        -- 'yamllint',
-        'emmet_ls',
     },
     automatic_enable = false,
 })
@@ -227,7 +231,7 @@ vim.lsp.enable({
     -- 'pylsp',
     'quick_lint_js',
     'rust_analyzer',
-    'tailwindcss',
+    -- 'tailwindcss',
     'templ',
     'tflint',
     'thriftls',

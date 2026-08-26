@@ -116,7 +116,13 @@ local plugins = {
     "tpope/vim-surround",
     "christoomey/vim-tmux-navigator",
     "ThePrimeagen/harpoon",
-    "ray-x/lsp_signature.nvim",
+    {
+        "ray-x/lsp_signature.nvim",
+        event = "InsertEnter",
+        opts = {
+            -- cfg options
+        },
+    },
     -- codeverse integration
     -- {
     --     "https://code.byted.org/chenjiaqi.cposture/codeverse.vim.git",
