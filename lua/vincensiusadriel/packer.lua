@@ -320,6 +320,8 @@ local plugins = {
             vim.o.autoread = true
         end,
     },
+
+    { "mfussenegger/nvim-jdtls" }
 }
 
 local opts = {}
