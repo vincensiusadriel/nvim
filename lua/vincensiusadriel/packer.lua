@@ -140,13 +140,10 @@ local plugins = {
         'iamcco/markdown-preview.nvim',
         cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
         ft = { 'markdown' },
-        build = function()
-            vim.fn['mkdp#util#install']()
-        end,
+        build = "cd app && ./install.sh v0.0.10",
     },
     {
         "nickjvandyke/opencode.nvim",
-        version = "*", -- Latest stable release
 
         dependencies = {
             -- Recommended for `ask()` and `select()`.

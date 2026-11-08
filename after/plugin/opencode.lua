@@ -9,7 +9,8 @@ vim.keymap.set({ "n", "x" }, "<leader>oa", function() require("opencode").ask("@
 vim.keymap.set({ "n", "x" }, "<leader>ox", function() require("opencode").select() end,
     { desc = "Select OpenCode…" })
 
-local opencode_cmd = "opencode --port"
+-- OpenCode V2 discovers or starts its shared background service automatically.
+local opencode_cmd = "opencode"
 -- local opencode_cmd = "ttadk code" --bytedance adk
 local opencode_pane_id = nil
 local opencode_visible = false
