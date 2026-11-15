@@ -32,4 +32,5 @@ required fd and ripgrep
 ```
 brew install fd
 brew install ripgrep
+brew install fzf
 ```
